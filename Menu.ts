@@ -1,8 +1,16 @@
 import readlinesync from "readline-sync";
 import { colors } from "./Colors";
+import { Artefato } from "./src/model/Artefato";
+import { Artefato_Arcano } from "./src/model/Artefato_Arcano";
+import { Artefato_Combate } from "./src/model/Artefato_Combate";
+
 
 export function main(){
     let opcao: number;
+
+    let item1 = new Artefato_Combate(1, "Espada de Safira", "Combate", 150, "Forja dos Gnomos", 2);
+    let item2 = new Artefato_Arcano(2, "Cajado de Fênix", "Arcano", 450, "Ordem dos Elfos", 1);
+    let item3 = new Artefato_Combate(3, "Escudo de Ébano", "Combate", 200, "Guilda dos Ferreiros", 2);
 
     while(true){
 console.log(colors.bg.black, colors.fg.magenta,
