@@ -3,14 +3,18 @@ import { colors } from "./Colors";
 import { Artefato } from "./src/model/Artefato";
 import { Artefato_Arcano } from "./src/model/Artefato_Arcano";
 import { Artefato_Combate } from "./src/model/Artefato_Combate";
+import{ ArtefatoController } from "./src/controller/ArtefatoController"
 
 
 export function main(){
-    let opcao: number;
 
-    let item1 = new Artefato_Combate(1, "Espada de Safira", "Combate", 150, "Forja dos Gnomos", 2);
-    let item2 = new Artefato_Arcano(2, "Cajado de Fênix", "Arcano", 450, "Ordem dos Elfos", 1);
-    let item3 = new Artefato_Combate(3, "Escudo de Ébano", "Combate", 200, "Guilda dos Ferreiros", 2);
+    let artefato: ArtefatoController = new ArtefatoController();
+    let opcao: number;
+    const artefatos = new ArtefatoController()
+
+    artefatos.adicionar(new Artefato_Combate(1, "Espada de Safira", "Combate", 150, "Forja dos Gnomos", 2));
+    artefatos.adicionar(new Artefato_Arcano(2, "Cajado de Fênix", "Arcano", 450, "Ordem dos Elfos", 1));
+    artefatos.adicionar(new Artefato_Combate(3, "Escudo de Ébano", "Combate", 200, "Guilda dos Ferreiros", 2));
 
     while(true){
 console.log(colors.bg.black, colors.fg.magenta,
@@ -25,7 +29,7 @@ console.log(colors.bg.black, colors.fg.magenta,
         console.log("*            Empório dos Artefatos Mágicos              *");
         console.log("*                                                       *");
         console.log("*           1 - * Lista de Artefatos*                   *");
-        console.log("*           2 - Adicionar a Bolsa                       *");
+        console.log("*           2 - Conteúdo da Bolsa                       *");
         console.log("*           3 - Retirar da Bolsa                        *");
         console.log("*           4 - Aprimorar Encantamento                  *");
         console.log("*           5 - Pagar                                   *");
@@ -47,43 +51,62 @@ console.log(colors.bg.black, colors.fg.magenta,
         }
         switch(opcao){
             case 1:
-            console.log(colors.fg.green,"\n\nEstes são os artefatos à venda: \n\n", colors.reset);
-            keyPress()
-            break;
+                console.log(colors.fg.green, "\n--- Artefatos à Venda ---", colors.reset);
+                artefatos.listarTodos();
+                keyPress();
+                break;
+
             case 2:
-            console.log(colors.fg.green,"\n\nVocê possui um artefato na bolsa\n\n", colors.reset);
-            console.log(colors.fg.green, "\n\nVolte ao Menu para finalizar a compra\n\n", colors.reset)
-            keyPress()
-            break;
+                console.log(colors.fg.green, "\n--- Conteúdo da sua Bolsa ---", colors.reset);
+                artefatos.listarMochila();
+                keyPress();
+                break;
+
             case 3:
-            console.log(colors.fg.green,"\n\nArtefato retirado da bolsa\n\n", colors.reset);
-            console.log(colors.fg.green,"\n\nVocê possui zero artefatos na bolsa\n\n", colors.reset);
-            keyPress()
-            break;
+                let idRetirar = readlinesync.questionInt("\nDigite o ID do item para devolver ao estoque: ");
+                artefatos.retirarDaMochila(idRetirar);
+                keyPress();
+                break;
+
             case 4:
-            console.log(colors.fg.green,"\n\nArtefato aprimorado\n\n", colors.reset);
-            keyPress()
-            break;
+                console.log("\n--- Atualizar Artefato ---");
+                let idAt = readlinesync.questionInt("Digite o ID do item que deseja atualizar: ");
+                console.log(colors.fg.yellow, "Funcionalidade de formulário de atualização em desenvolvimento.", colors.reset);
+                keyPress();
+                break;
+
             case 5:
-            console.log(colors.fg.green,"\n\nParabéns você é dono de um novo artefato!\n\n", colors.reset);
-            keyPress()
-            break;
+                console.log(colors.fg.green, "\n--- Comprar Artefato ---", colors.reset);
+                let idPagamento = readlinesync.questionInt("Digite o ID do Artefato: ");
+                let valorPago = readlinesync.questionFloat("Quantas moedas de ouro voce vai oferecer? ");
+                
+                artefatos.pagar(idPagamento, valorPago);
+                keyPress();
+                break;
+
             case 6:
-            console.log(colors.fg.green,"\n\nAqui está o seu artefato\n\n", colors.reset);
-            keyPress()
-            break;
-            case 7: 
-            console.log(colors.fg.green,"\n\nArtefato vendido\n\n", colors.reset);
-            keyPress()
-            break;
+                let idBusca = readlinesync.questionInt("\nDigite o ID para buscar no estoque: ");
+                artefatos.procurarPorId(idBusca);
+                keyPress();
+                break;
+
+            case 7:
+                console.log(colors.fg.red, "\n--- Remover do Sistema ---", colors.reset);
+                let idDeletar = readlinesync.questionInt("Digite o ID do item para remover permanentemente: ");
+                artefatos.deletar(idDeletar); 
+                keyPress();
+                break;
+
             case 8:
-            console.log(colors.fg.green,"\n\nMensagem enviada\n\n", colors.reset);
-            keyPress()
-            break;
+                let mensagem = readlinesync.question("\nDigite sua mensagem para o mestre: ");
+                console.log(colors.fg.green, "\nMensagem enviada com sucesso!", colors.reset);
+                keyPress();
+                break;
+
             default:
-            console.log(colors.fg.red, "\nA opção é inválida\n", colors.reset)
-            break;
-        
+                console.log(colors.fg.red, "\nOpção inválida!", colors.reset);
+                keyPress();
+                break;
         }
     }
 }
